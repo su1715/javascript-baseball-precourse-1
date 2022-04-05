@@ -1,17 +1,19 @@
+import BaseBallGame from "./BaseBallGame.js"
+
 export default class App {
 	constructor() {
 		this.$form = document.getElementById('input-form')
 		this.$input = document.getElementById('user-input')
 		this.$button = document.getElementById('submit')
 		this.$result = document.getElementById('result')
-		this.init();
-	}
-	init() {
+		const baseBallGame = new BaseBallGame();
+		
 		this.$form.addEventListener('submit', (e) => {
 			e.preventDefault();
-			console.log(this.$input.value)
+			const inputValue = this.$input.value
+			console.log(inputValue)
+			baseBallGame.takeUserNumber(inputValue)
 			this.$input.innerText='';
 		})
 	}
-
 }
