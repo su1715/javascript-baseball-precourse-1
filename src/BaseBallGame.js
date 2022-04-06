@@ -7,11 +7,10 @@ export default class BaseBallGame {
 
 	takeUserNumber(input) {
 		if (!this.checkUserNumber(input)) 
-			return {result: "error", message: MSG_ERROR};
+			return {result: "error", message: ''};
 		
 		const {computerInputNumbers} = this;
 		const userInputNumbers = parseInt(input);
-		console.log(userInputNumbers, computerInputNumbers)//
 		const message = this.play(computerInputNumbers, userInputNumbers);
 
 		if (message === MSG_SUCCESS) return {result: "success", message};
@@ -19,17 +18,17 @@ export default class BaseBallGame {
 	}	
 	
 	createRandomNumber() {
-		const alreadyChecked = new Array(10).fill(false)
-		let count = 0
-		let result = ""
+		const alreadyChecked = new Array(10).fill(false);
+		let count = 0;
+		let result = "";
 		while (count < 3) {
-			const randomNumber = MissionUtils.Random.pickNumberInRange(1, 9)
+			const randomNumber = MissionUtils.Random.pickNumberInRange(1, 9);
 			if (alreadyChecked[randomNumber]) continue;
 			alreadyChecked[randomNumber] = true;
 			result += randomNumber;
 			count++;
 		}
-		return parseInt(result)
+		return parseInt(result);
 	}
 
 	checkUserNumber(userInput) {
@@ -54,7 +53,6 @@ export default class BaseBallGame {
 				else ball++;
 			}
 		})
-
 		return this.makeResultMessage(ball, strike);
 	}
 
