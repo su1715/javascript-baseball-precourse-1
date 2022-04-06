@@ -12,7 +12,9 @@ export default class BaseBallGame {
 			const userInputNumbers = input
 			const {computerInputNumbers} = this;
 			console.log(userInputNumbers, computerInputNumbers)
-			//const result = this.play(computerInputNumbers, userInputNumbers)
+			const message = this.play(parseInt(computerInputNumbers), parseInt(userInputNumbers))
+			if (message === "정답을 맞추셨습니다") return {result: "success", message};
+			return {result: "fail", message};
 		}
 		else return {result: "error", message: "잘못된 입력입니다"}
 	}	
@@ -28,7 +30,6 @@ export default class BaseBallGame {
 			result += randomNumber;
 			count++;
 		}
-		console.log("result:",result)
 		return result
 	}
 
@@ -45,8 +46,27 @@ export default class BaseBallGame {
 		return true;
 	}
 
-	play () {
+	play (userInputNumbers, computerInputNumbers) {
+		const userInputArr = [...userInputNumbers.toString()];
+		const computerInputArr = [...computerInputNumbers.toString()];
+		let strike = 0;
+		let ball = 0;
+		userInputArr.forEach((userNum,i) => {
+			if (computerInputArr.includes(userNum)) {
+				if (i === computerInputArr.indexOf(userNum)) strike++;
+				else ball++;
+			}
+		})
 
+		return this.makeResultMessage(ball, strike);
+	}
+
+	makeResultMessage(ball, strike) {
+		if (strike === 3) return "정답을 맞추셨습니다";
+		if (ball === 0 && strike === 0) return "낫싱";
+		if (ball === 0) return `${strike}스트라이크`;
+		if (strike === 0) return `${ball}볼`;
+		return `${ball}볼 ${strike}스트라이크`;
 	}
 
 

@@ -11,8 +11,10 @@ export default class App {
 		this.$form.addEventListener('submit', (e) => {
 			e.preventDefault();
 			const inputValue = this.$input.value
-			console.log(baseBallGame.takeUserNumber(inputValue))
-			this.$input.innerText='';
+			const result = baseBallGame.takeUserNumber(inputValue)
+			console.log(result);
+			this.$result.innerText = result.message;
+			this.$input.value='';
 		})
 	}
 }
