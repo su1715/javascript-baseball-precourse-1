@@ -7,26 +7,33 @@ export default class App {
 		this.$button = document.getElementById('submit');
 		this.$result = document.getElementById('result');
 		this.$restart = document.getElementById('game-restart-button');
-		this.$restart.style.display = "none";
-		const baseBallGame = new BaseBallGame();
+		this.baseBallGame = new BaseBallGame();
+		this.init();
 		
 		this.$form.addEventListener('submit', (e) => {
 			e.preventDefault();
 			const inputValue = this.$input.value;
-			const result = baseBallGame.takeUserNumber(inputValue);
-			console.log(result);
-			if (result.result === "error") alert(result.message);
+			const response = this.baseBallGame.takeUserNumber(inputValue);
+			console.log(response);
+			if (response.result === "error") alert(response.message);
 			else {
-				if (result.result === "success") this.$restart.style.display = "inline-block"
-				this.$result.innerText = result.message;
+				this.$result.innerText = response.message;
+				if (response.result === "success") {
+					this.$result.innerText += "\n 게임을 새로 시작하시겠습니까?"
+					this.$restart.style.display = "inline-block";
+				}
 			}
 			this.$input.value='';
 		})
 
 		this.$restart.addEventListener('click', (e) => {
-			this.$result.innerText = '';
-			this.$restart.style.display = "none";
-			baseBallGame.start();
+			this.init();
 		})
+	}
+
+	init() {
+		this.$restart.style.display = "none";
+		this.$result.innerText = '';
+		this.baseBallGame.start();
 	}
 }

@@ -1,22 +1,21 @@
-export default class BaseBallGame {
-	constructor() {
-		this.start();
-	}
+import {MSG_SUCCESS, MSG_ERROR} from './constants.js';
 
+export default class BaseBallGame {
 	start() {
 		this.computerInputNumbers = this.createRandomNumber();
 	}
 
 	takeUserNumber(input) {
-		if (this.checkUserNumber(input)) {
-			const userInputNumbers = input
-			const {computerInputNumbers} = this;
-			console.log(userInputNumbers, computerInputNumbers)
-			const message = this.play(parseInt(computerInputNumbers), parseInt(userInputNumbers))
-			if (message === "정답을 맞추셨습니다") return {result: "success", message};
-			return {result: "fail", message};
-		}
-		else return {result: "error", message: "잘못된 입력입니다"}
+		if (!this.checkUserNumber(input)) 
+			return {result: "error", message: MSG_ERROR};
+		
+		const {computerInputNumbers} = this;
+		const userInputNumbers = parseInt(input);
+		console.log(userInputNumbers, computerInputNumbers)//
+		const message = this.play(computerInputNumbers, userInputNumbers);
+
+		if (message === MSG_SUCCESS) return {result: "success", message};
+		return {result: "fail", message};
 	}	
 	
 	createRandomNumber() {
@@ -30,18 +29,16 @@ export default class BaseBallGame {
 			result += randomNumber;
 			count++;
 		}
-		return result
+		return parseInt(result)
 	}
 
 	checkUserNumber(userInput) {
-		if (userInput.length !== 3) return false;
-		if ([...userInput].some((el)=> isNaN(el))) return false;
-		if ([...userInput].some((el)=>parseInt(el) === 0)) return false;
 		const alreadyChecked = new Array(10).fill(false);
+		if (userInput.length !== 3) return false;
+		if ([...userInput].some((el)=> (isNaN(el)) || parseInt(el === 0))) return false;
 		for (let i = 0; i < 3; i++) {
 			if (alreadyChecked[userInput[i]]) return false;
 			alreadyChecked[userInput[i]] = true;
-			console.log('replay2')
 		}
 		return true;
 	}
@@ -62,12 +59,10 @@ export default class BaseBallGame {
 	}
 
 	makeResultMessage(ball, strike) {
-		if (strike === 3) return "정답을 맞추셨습니다";
+		if (strike === 3) return MSG_SUCCESS;
 		if (ball === 0 && strike === 0) return "낫싱";
-		if (ball === 0) return `${strike}스트라이크`;
-		if (strike === 0) return `${ball}볼`;
+		if (ball === 0) return `${strike} 스트라이크`;
+		if (strike === 0) return `${ball} 볼`;
 		return `${ball}볼 ${strike}스트라이크`;
 	}
-
-
 }
